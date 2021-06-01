@@ -41,6 +41,7 @@ class TM:
         for i in value:
             self._cinta.append(i)
         self._cinta.append(self.blank)
+        self.tabla.rows = list()
 
     def get_terna(self, state, simbol):
         try:
