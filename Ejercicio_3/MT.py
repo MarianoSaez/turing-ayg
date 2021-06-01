@@ -7,6 +7,9 @@ Restricciones:
       existir dos transiciones para un mismo par estado-simbolo
     - No deben existir transiciones desde los estados finales (POSIBLEMENTE SOLUCIONADO)
 """
+from table import Table
+
+
 class TM:
     # Constructor de Maquina de Turing
     # Definicion de una TM:
@@ -26,6 +29,7 @@ class TM:
         self.blank = blank
         self.delta = delta
         self.cinta = cinta
+        self.tabla = Table("ESTADO ACTUAL:SIMBOLO ACTUAL:SIG. ESTADO:SIMBOLO ESCRITO:MOVIMIENTO".split(":"))
 
     @property
     def cinta(self):
@@ -56,6 +60,9 @@ class TM:
             # Leer simbolo de la cinta
             curr_simbol = self.cinta[i]
 
+            # Construimos la fila para la tabla [display]
+            row = [curr_state, curr_simbol]
+
             # Determinar si es un estado de aceptacion o rechazo
             if not self.seek_next_terna(curr_state, curr_simbol):
                 if curr_state in self.F:
@@ -65,8 +72,11 @@ class TM:
 
             # Obtener imagen para el par (curr_state, curr_simbol)
             curr_state, w_simbol, move = self.get_terna(curr_state, curr_simbol)
-            print(f"Estado: {curr_state} | Simbolo: {curr_simbol}")
 
+            # Agregamos ultimos campos a la fila de la tabla [display]
+            row.append(curr_state)
+            row.append(w_simbol)
+            row.append(move)
 
             # Escribir simbolo en la cinta
             self.cinta[i] = w_simbol
@@ -80,35 +90,47 @@ class TM:
                 # Caso de TM extendida d: Q x G --> Q x G x { R, L, S }
                 i = i
 
+            # Agregamos la fila a la tabla asociada
+            self.tabla.rows.append(row)
+
+    def resume(self, computable):
+        valid = " ES UNA CADENA VALIDA "
+        not_valid = " NO ES UNA CADENA VALIDA "
+        print(self.tabla)
+        if computable:
+            print(valid.center(88, "="))
+        else:
+            print(not_valid.center(88, "="))
 
 
 # Codigo de prueba
 if __name__ == "__main__":
-    start = "A"
-    F = ["F"]
-    blank = "#"
-    delta = {
-        "Aa": "B a R",
-        "Ab": "C b R",
-        "Ba": "D a R",
-        "Bb": "C b R",
-        "B#": "F # L",
-        "C#": "F # L",
-        "Da": "D a R",
-        "Db": "C b R"
-    }
-    # start = "q0"
-    # F = ["q1"]
+    # start = "A"
+    # F = ["F"]
     # blank = "#"
     # delta = {
-    #     "q00": "q1 # R",
-    #     "q01": "q0 # R",
-    #     "q10": "q0 # R",
-    #     "q11": "q1 # R"
+    #     "Aa": "B a R",
+    #     "Ab": "C b R",
+    #     "Ba": "D a R",
+    #     "Bb": "C b R",
+    #     "B#": "F # L",
+    #     "C#": "F # L",
+    #     "Da": "D a R",
+    #     "Db": "C b R"
     # }
-    entrada = "ba"
+    start = "q0"
+    F = ["q1"]
+    blank = "#"
+    delta = {
+        "q00": "q1 # R",
+        "q01": "q0 # R",
+        "q10": "q0 # R",
+        "q11": "q1 # R"
+    }
+    entrada = "1100"
 
     M = TM(start, F, blank, delta)
     M.cinta = entrada
 
-    print(M.compute())
+    result = M.compute()
+    M.resume(result)
