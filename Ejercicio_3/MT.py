@@ -28,8 +28,8 @@ class TM:
         self.F = F
         self.blank = blank
         self.delta = delta
-        self.cinta = cinta
         self.tabla = Table("ESTADO ACTUAL:SIMBOLO ACTUAL:SIG. ESTADO:SIMBOLO ESCRITO:MOVIMIENTO".split(":"))
+        self.cinta = cinta
 
     @property
     def cinta(self):
