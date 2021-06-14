@@ -12,7 +12,7 @@ from table import Table
 
 class TM:
     # Constructor de Maquina de Turing
-    # Definicion de una TM:
+    # Definicion formal de una TM:
     #   M = ( Q, S, G, start, F, blank, delta )
     #   Donde:
     #       Q es el conjunto de estados de la TM
@@ -54,6 +54,11 @@ class TM:
             return True
         return False
 
+
+    # Funcion principal encargada de computar cadenas de entrada a
+    # la maquina de Turing. Agrega cada configuracion a la tabla
+    # de la MT.
+    # Retorna True o False segun si la cadena es o no es computable.
     def compute(self):
         curr_state = self.start
         i = 0
@@ -94,6 +99,8 @@ class TM:
             # Agregamos la fila a la tabla asociada
             self.tabla.rows.append(row)
 
+    # Funcion encargada de imprimir la linea final que indica si
+    # la cadena es valida o no
     def resume(self, computable):
         valid = " ES UNA CADENA VALIDA "
         not_valid = " NO ES UNA CADENA VALIDA "
